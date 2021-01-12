@@ -1,0 +1,23 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: pod-admission-webhook
+webhooks:
+- name: pod-admission-webhook.kube-system.svc
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMzRENDQWNRQ0NRREtOSEdpcURoa016QU5CZ2txaGtpRzl3MEJBUXNGQURBd01TNHdMQVlEVlFRRERDVncKYjJRdFlXUnRhWE56YVc5dUxYZGxZbWh2YjJzdWEzVmlaUzF6ZVhOMFpXMHVjM1pqTUI0WERUSXhNREV4TWpBNQpNak0wTWxvWERUUTRNRFV6TURBNU1qTTBNbG93TURFdU1Dd0dBMVVFQXd3bGNHOWtMV0ZrYldsemMybHZiaTEzClpXSm9iMjlyTG10MVltVXRjM2x6ZEdWdExuTjJZekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0MKQVFvQ2dnRUJBTXpmUTg5dVA4SWo5QWZPZDZ5UGR4d3lKaEV1dnlUZURIR0FzTk1KNS9LWUROZUR5VjlFNDdGMwpuMEMrMUswQUIyY20zZ2E3WDNXMEVIbFZWekVnZnRXMlR5KzFQdmlacjllU2p1ZklXbmRTcWtaTkFZK1kxNEVVCndUcTFvTGUwMUxCTk5XVyt3RjV4SktCMnZETlZ5WWl6Q0tpSjNBV1ZobmFLUW9ON0VwRkJNSktHVDFIYWlGekkKS2l2bUpjSXlwOFVBNFBrNEVXb0I4LzZacXNVSlJ4L3dTMzBML1RUUUwvTVpDUDlZcFR3dDU5bGtSTkhsZk01TAp3aTdDdmtCR0pkUEZ1bG4vaVcvcjZiYUsrYTRWQnFkZDIydjRPOWRCVE52dldiYnd1SVBVNS95d3BDOGpPQmZZCjdzU091dlZVQ09Rby9oTDlXRHBOdHFhTm9PdHkycDhDQXdFQUFUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUEKQXJCSk82aGNuL1czWkQzOVZEckJpQURybjNjTU54WVg3K1BKSitVY0tLMXFnSUVGQVc5QkF0M29sU1ZDNEk3VQpsU05rTEJvc0Rsa05MbUozemtBbGYrTXYwWmtLUkhFS2YwR3BXcy9PYkgzZytWLzg0c0FpUFpUdnNDQkVGR3ZlClg2eFJoR1VrZk53NzVyVmhNWnBoS0l5anh0Mk5aUjg2KzB5OC9MMmkvQ0xIanBoUmdQK0RsUG1ONkptM2pQb08KMy9RWnBJeHlyVmZzTDJWQTk4UHV5bGRQRTQrMGRMd2k0NUdmU3ZKb045cVV5VnYyZm14SHRKMTM2OUh0MWNXSAozdTk5Vlk4eHlvSlhmMVUvSVBSTzNkbjNocVM3Z1B4UVZ6Sm1SUVhSWTltci93TU5ieXNKSG1xNFlESThEQ3p0CkdMb3VKMzFtZm5vUnpvSTFCWUlISVE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    service:
+      name: pod-admission-webhook
+      namespace: kube-system
+      path: "/mutate-pod"
+  rules:
+  - operations: ["CREATE"]
+    apiGroups: [""]
+    apiVersions: ["v1"]
+    resources: ["pods"]
+  failurePolicy: Fail
+  namespaceSelector:
+    matchLabels:
+      pod-admission-webhook-injection: enabled
+  sideEffects: None
+  admissionReviewVersions: ["v1", "v1beta1"]

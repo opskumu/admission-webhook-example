@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-admission-webhook 
+  namespace: kube-system 
+  labels:
+    app: pod-admission-webhook 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-admission-webhook
+  template:
+    metadata:
+      labels:
+        app: pod-admission-webhook
+    spec:
+      containers:
+        - name: pod-admission-webhook
+          image: <image>
+          command: 
+            - "/pod-admission-webhook"
+          args: 
+            - "--cert-dir"
+            - "/certs"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /certs
+              readOnly: true
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 125m
+              memory: 500Mi
+      volumes:
+      - name: webhook-certs
+        secret:
+          secretName: pod-admission-webhook

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pod-admission-webhook
+  name: pod-admission-webhook
+  namespace: pod-admission-webhook
+spec:
+  ports:
+  - name: 443-9443
+    port: 443
+    protocol: TCP
+    targetPort: 9443
+  selector:
+    app: pod-admission-webhook
+  type: ClusterIP
